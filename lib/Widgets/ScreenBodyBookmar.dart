@@ -2,20 +2,23 @@ import 'package:asad_quran_app/BookMarkClass.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../DisplayPdf.dart';
 import 'PdfPagereferences.dart';
 
 class CustomBookmark extends StatelessWidget {
 
   final BookMarkClass bookMarkClass;
-
-  const CustomBookmark(this.bookMarkClass, {super.key});
+  int index;
+  final VoidCallback onDelete;
+  CustomBookmark({required this.bookMarkClass,required this.index,required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
+
+
     return InkWell(
       onTap: (){
-        PageRef ref = new PageRef();
-        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => PdfDisplayer(page: string,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PdfDisplayer(page: bookMarkClass.page,)));
       },
       child: Column(
         children: [
@@ -35,7 +38,7 @@ class CustomBookmark extends StatelessWidget {
                         child: Padding(
                         padding: EdgeInsets.fromLTRB(15,15,15,15),
                         child: Text(
-                        "1",
+                          (index+1).toString(),
                           style: const TextStyle(
                             fontSize: 13,
                           ),
@@ -102,19 +105,16 @@ class CustomBookmark extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0,15,0,15),
                   child: IconButton(
-                    onPressed: () {  },
+                    onPressed: () => onDelete(),
                     icon: Icon(CupertinoIcons.xmark),
-
                   ),
                 ),
               ]),
           const Divider(height: 4.0,),
         ],
-
       ),
 
     );

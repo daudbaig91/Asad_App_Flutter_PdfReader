@@ -1,6 +1,7 @@
 
 import 'package:asad_quran_app/BookMarkClass.dart';
 import 'package:asad_quran_app/DisplayPdf.dart';
+import 'package:asad_quran_app/SurahClass.dart';
 import 'package:asad_quran_app/Widgets/FloatingAnimatedButton.dart';
 import 'package:asad_quran_app/Widgets/NavigationListViews.dart';
 
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'NotificationClass.dart';
+import 'NotificationClass2.dart';
 import 'SQLDatabase/database.dart';
 import 'Widgets/HomeSearchbar.dart';
 import 'Widgets/ListView_Bookmark.dart';
@@ -31,15 +33,12 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
-
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
       startLists();
     });
-
   }
 
   @override
@@ -48,29 +47,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     super.dispose();
   }
 
-  void addList(String str){
-    setState(() {
-      ListData["surah 0"] = 0;
-    });
-
-  }
-
   Future<void> startLists() async {
-
-    DbManager dbManager = new DbManager();
-
-    bookMark = await dbManager.getModelList();
-
-
-    ListData["Surah 2"] = 2;
-    ListData["Surah 10"] = 10;
-    ListData["Surah 23"] = 23;
-    ListData["Surah 12"] = 12;
-    ListData["Surah 4"]= 4;
-
     for (int i = 1; i <= 30; i++) {
       listparah["Parah $i"] = (i);
     }
+    DbManager2 dbManager2 = new DbManager2();
+    DbManager dbManager = new DbManager();
+    listSurah = await dbManager2.getModelList();
+    bookMark = await dbManager.getModelList();
+    listSurah.add(SurahClass(surah: 2, page: 2));
+
+
 
   }
 
@@ -87,7 +74,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
 
   Map<String,int> listparah = {};
-  Map<String,int> ListData = {};
+  List<SurahClass> listSurah = [];
   List<BookMarkClass> bookMark = [];
 
   bool searchBar = false;
@@ -98,8 +85,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       if(notification.showSearchBar){
         searchBar = !searchBar;
       }else if(notification.surahAdder){
-        ListData["Surah " + notification.nameSurah.toString()] = 2;
-        ListData["Surah ${notification.pageSurah.toString()}"] = 2;
+        listSurah.add(
+          SurahClass(surah: notification.nameSurah,
+            page: notification.pageSurah));
       }else if(notification.bookmarkAdder){
         bookMark.add(
           BookMarkClass(surah: notification.surahBookmark.toString(),
@@ -110,19 +98,30 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             )
         );
       }
-
     });
-    // true meaning processed, no following notification bubbling.
     return true;
   }
+
+  bool onNvigatorCall(MyNotification2 notification) {
+    if(notification.surahcalled){
+      listSurah = notification.surahlist;
+    }else if(notification.bookmarkcalled){
+      bookMark = notification.bookMarklist;
+    }
+    setState(() {
+    });
+    return true;
+  }
+
 
   @override
   Widget build(BuildContext context) {
 
     List<Widget> naviagtionList = <Widget>[];
     naviagtionList.add(Listview1(listparah));
-    naviagtionList.add(Listview1(ListData));
+    naviagtionList.add(Listview3(listSurah));
     naviagtionList.add(Listview2(bookMark));
+
 
     return MaterialApp(
 
@@ -141,12 +140,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           child: Stack(
             children: <Widget>[
               FloatingActionButton(onPressed: () async {
-                DbManager dbManager = new DbManager();
+                DbManager2 dbManager = new DbManager2();
                 dbManager.getModelListlength();
-              }, child: Text(
+              }, child: const Text(
                   "2",
               )),
-              naviagtionList.elementAt(_selectedIndex),
+              NotificationListener<MyNotification2>(onNotification: onNvigatorCall, child: naviagtionList.elementAt(_selectedIndex)),
               Align(
                 alignment: Alignment.bottomRight,
                 child: NotificationListener<MyNotification>(onNotification: onTitlePush,

@@ -1,4 +1,5 @@
 import 'package:asad_quran_app/SQLDatabase/BookMarkModel.dart';
+import 'package:asad_quran_app/SQLDatabase/surahModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -133,7 +134,6 @@ class _RotateIconState extends State<RotateIcon>
                         Row(children: [
                           Expanded(child:Padding(padding: EdgeInsets.fromLTRB(15,0,15,0),child: TextField(
                             onChanged: (value) {
-
                                 try {
                                   nameSurah = int.parse(value);
                                 }catch(e){
@@ -160,12 +160,18 @@ class _RotateIconState extends State<RotateIcon>
 
                         Divider(),
                         TextButton(
-                          onPressed: (){
+                          onPressed: () async {
                             if(pageSurah >= 0 && nameSurah >= 0){
+                              DbManager2 dbManager = new DbManager2();
                               MyNotification notification = MyNotification();
                               notification.surahAdder = true;
                               notification.pageSurah = pageSurah;
                               notification.nameSurah = nameSurah;
+                              SurahModel __model = await SurahModel(
+                                surah: nameSurah,
+                                page: pageSurah,
+                              );
+                              dbManager.insertModel(__model);
                               notification..dispatch(context);
                             }
                           }, child: Container(

@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:asad_quran_app/BookMarkClass.dart';
 import 'package:asad_quran_app/SQLDatabase/BookMarkModel.dart';
+import 'package:asad_quran_app/SQLDatabase/surahModel.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../SurahClass.dart';
 
 
 class DbManager {
@@ -47,14 +50,51 @@ class DbManager {
     final List<Map<String, dynamic>> maps = await _database.query('bookmark');
     print(maps.length);
   }
-  // Future<int> updateModel(BookMarkModel bookmark) async {
-  //   await openDb();
-  //   return await _database.update('bookmark', bookmark.toJson(),
-  //       where: "id = ?", whereArgs: [bookmark.index]);
-  // }
 
   // Future<void> deleteModel(BookMarkModel bookmark) async {
   //   await openDb();
   //   await _database.delete('bookmark', where: "integer = ?", whereArgs: [bookmark.index]);
   // }
+}
+
+class DbManager2 {
+  late Database _database;
+
+  Future openDb() async {
+    _database = await openDatabase(join(await getDatabasesPath(), "s2.db"),
+        version: 1, onCreate: (Database db, int version) async {
+          await db.execute(
+            "CREATE TABLE surah(surah INTEGER, page INTEGER)",
+          );
+          //,
+        });
+    return _database;
+  }
+
+  Future insertModel(SurahModel surahmodel) async {
+    await openDb();
+    return await _database.insert('surah',  surahmodel.toJson());
+  }
+
+  Future<List<SurahClass>> getModelList() async {
+    await openDb();
+    final List<Map<String, dynamic>> maps = await _database.query('surah');
+    print(maps.length);
+    return List.generate(maps.length, (i) {
+      return SurahClass(
+        surah: maps[i]['surah'],
+        page: maps[i]['page'],
+      );
+    });
+  }
+  void getModelListlength() async {
+    await openDb();
+    final List<Map<String, dynamic>> maps = await _database.query('surah');
+    print(maps.length);
+  }
+
+Future<void> deleteModel(BookMarkModel bookmark) async {
+  await openDb();
+  await _database.delete('surah', where: "integer = ?", whereArgs: [bookmark.index]);
+}
 }

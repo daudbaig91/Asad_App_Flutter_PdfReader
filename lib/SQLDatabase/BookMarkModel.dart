@@ -6,6 +6,7 @@ class BookMarkModel {
   String desc;
 
 
+
   BookMarkModel({required this.surah,required this.parah,required this.page,
     required this.title,required this.desc});
 
