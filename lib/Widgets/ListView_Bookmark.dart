@@ -1,17 +1,13 @@
+import 'package:asad_quran_app/BookMarkClass.dart';
 import 'package:flutter/material.dart';
 
-import '../Pages.dart';
+import 'ScreenBodyBookmar.dart';
 import 'ScreenBodyWidget.dart';
 
-class Listview1 extends StatelessWidget {
-  late Map<String,int> list;
+class Listview2 extends StatelessWidget {
+  late List<BookMarkClass> list;
 
-
-  Listview1(Map<String,int> list){
-    this.list = Map.fromEntries(list.entries.toList()..sort((e1, e2) =>
-        (int.parse(e1.key.substring(5)))
-            .compareTo(int.parse(e2.key.substring(5)))));
-  }
+  Listview2(this.list);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +18,7 @@ class Listview1 extends StatelessWidget {
         child:ListView.builder(
             itemCount: list.length,
             itemBuilder: (BuildContext context, int index) {
-               return CustomListView(list.keys.elementAt(index).toString(),index+1);
+              return CustomBookmark(list[index]);
             }
         )
     );

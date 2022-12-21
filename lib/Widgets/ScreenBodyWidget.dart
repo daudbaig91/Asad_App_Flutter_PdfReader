@@ -1,17 +1,26 @@
+import 'package:asad_quran_app/Widgets/PdfPagereferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../DisplayPdf.dart';
 
 class CustomListView extends StatelessWidget {
 
   final String str;
-
-  const CustomListView(this.str);
+  final int index;
+  const CustomListView(this.str,this.index);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        print(str);
+
+
+        PageRef ref = new PageRef();
+
+        print(ref.getPage(str));
+        int string = int.parse(ref.getPage(str)!);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PdfDisplayer(page: string,)));
       },
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -27,7 +36,7 @@ class CustomListView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(15,15,15,15),
                   child: Text(
-                    str.substring(5),
+                    index.toString(),
                     style: const TextStyle(
                       fontSize: 22,
                     ),

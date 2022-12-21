@@ -34,4 +34,8 @@ class PageRef{
     map['Parah 10' ] = '181';
   }
 
+  String? getPage(String str){
+    return map[str];
+  }
+
 }
