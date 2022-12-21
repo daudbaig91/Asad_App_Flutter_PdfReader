@@ -1,8 +1,10 @@
 
+import 'package:asad_quran_app/SQLDatabase/surahModel.dart';
 import 'package:flutter/material.dart';
 
 import '../NotificationClass2.dart';
 import '../Pages.dart';
+import '../SQLDatabase/database.dart';
 import '../SurahClass.dart';
 import 'ScreenBodyWidget.dart';
 
@@ -52,9 +54,12 @@ class Listview3 extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return CustomListView2(
                 list: list[index],
-                index: index,
+                index: index+1,
                 onDelete: (){
                   print("done");
+                  DbManager2 dbManager = new DbManager2();
+                  dbManager.deleteModel(SurahModel(surah: list[index].surah,
+                      page: list[index].page));
                   list.removeAt(index);
                   MyNotification2 notification = MyNotification2();
                   notification.surahcalled = true;

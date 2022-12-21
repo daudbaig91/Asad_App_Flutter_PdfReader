@@ -51,10 +51,11 @@ class DbManager {
     print(maps.length);
   }
 
-  // Future<void> deleteModel(BookMarkModel bookmark) async {
-  //   await openDb();
-  //   await _database.delete('bookmark', where: "integer = ?", whereArgs: [bookmark.index]);
-  // }
+  Future<void> deleteModel(BookMarkModel bookmark) async {
+    await openDb();
+    await _database.rawDelete('DELETE FROM bookmark WHERE surah = ? AND parah = ? AND page = ? AND title = ? AND desc = ?' ,
+      [bookmark.surah,bookmark.parah,bookmark.page,bookmark.title,bookmark.desc],);
+  }
 }
 
 class DbManager2 {
@@ -93,8 +94,8 @@ class DbManager2 {
     print(maps.length);
   }
 
-Future<void> deleteModel(BookMarkModel bookmark) async {
-  await openDb();
-  await _database.delete('surah', where: "integer = ?", whereArgs: [bookmark.index]);
-}
+  Future<void> deleteModel(SurahModel surahModel) async {
+    await openDb();
+    await _database.delete('surah', where: "surah = ?", whereArgs: [surahModel.surah]);
+  }
 }

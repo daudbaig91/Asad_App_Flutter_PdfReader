@@ -55,7 +55,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     DbManager dbManager = new DbManager();
     listSurah = await dbManager2.getModelList();
     bookMark = await dbManager.getModelList();
-    listSurah.add(SurahClass(surah: 2, page: 2));
+
 
 
 
