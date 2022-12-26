@@ -7,7 +7,7 @@ Pdf viewer for a specific book (The quran) out of production in the 1980’s wit
 This project is a copy of my android project: (https://github.com/daudbaig91/AsadQuran_PdfReader)
 but now developed for cross-platforms as requested by the client.
 
-Thanks For Reading; //:)
+Thanks For Reading; // :)
 
 
 App showcase in different platoforns:
@@ -37,7 +37,9 @@ App showcase in different platoforns:
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/46162359/209238713-48aabd0f-cdbd-404d-af01-2d7ca61ed53e.gif)
 
 
-
 (assets not uploaded to git due to size..)
 
-
+Few more functionalities to be implemented:
+*File Loading
+*PDF chooser from app local pdf library.
+*Implemented surah adder and list items modifier.
